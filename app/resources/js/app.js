@@ -34,7 +34,7 @@ let token = $('meta[name="csrf-token"]').attr('content')
 $('.card').click(function (e) {
     e.preventDefault()
     let id = $(e.target).parent().attr('item')
-    $(e.target).parent().addClass("cheked")
+
     $.ajax({
         url: '/add/cors',
         method: 'get',
