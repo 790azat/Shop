@@ -1,0 +1,103 @@
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
+require('./bootstrap');
+
+window.Vue = require('vue').default;
+
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
+
+// const files = require.context('./', true, /\.vue$/i)
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the page. Then, you may begin adding components to this application
+ * or customize the JavaScript scaffolding to fit your unique needs.
+ */
+
+var $mydocument = $(document)
+
+let token = $('meta[name="csrf-token"]').attr('content')
+
+$('.card').click(function (e) {
+    e.preventDefault()
+    let id = $(e.target).parent().attr('item')
+    $(e.target).parent().addClass("cheked")
+    $.ajax({
+        url: '/add/cors',
+        method: 'get',
+        data: {
+            "_token": token,
+            'id': id,
+        },
+
+        success: function (data,response1,date){
+
+            if (date.responseText == 'true'){
+                console.log('true')
+
+            }
+            else   {
+                console.log('false')
+            }
+
+        }
+    })
+
+})
+$('#CorsClear').click(function (){
+    $.ajax({
+        url: '/del/cors/please',
+        method: 'POST',
+        data: {
+            "_token": token,
+
+        }
+    })
+})
+
+function GetCorsMuch(){
+
+    $.ajax({
+        url: '/get/cors/number',
+        method: 'POST',
+        data: {
+            "_token": token,
+        },
+       datatype: 'Json',
+        success: function (e,a,res){
+            if (res.responseText > 0){
+            corsnum = res.responseText
+                $('#corsnumber').text(corsnum)
+                console.log(corsnum)
+                $('#cors').css("display","flex")
+            }
+            else {
+                corsnum = 0
+                $('#cors').css("display","none")
+                console.log(corsnum)
+            }
+        },
+
+    })
+
+
+
+    }
+
+$mydocument.ready(GetCorsMuch)
+$mydocument.on('click',GetCorsMuch)
+
+
